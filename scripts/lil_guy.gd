@@ -28,8 +28,8 @@ func actor_setup():
 	# Now that the navigation map is no longer empty, set the movement target.
 	set_movement_target(movement_target_position)
 
-func set_movement_target(movement_target: Vector2):
-	navigation_agent.target_position = movement_target
+func set_movement_target(movement_target: Vector2): 
+	navigation_agent.target_position = Vector2(randfn(movement_target.x, 20), randfn(movement_target.y, 20))
 	wanderTimer = randfn(0.2, 0.1)
 
 func _physics_process(delta):
@@ -49,7 +49,8 @@ func _physics_process(delta):
 
 func _on_timer_timeout() -> void:
 	# do Brownian motion, kinda
+	# TODO: for better movement_target setting, check if new target crosses a wall via a raycast?
 	var next_path_position: Vector2 = navigation_agent.target_position
-	var randX = randfn(next_path_position.x, 10)
-	var randY = randfn(next_path_position.y, 10)
+	var randX = randfn(next_path_position.x, 20)
+	var randY = randfn(next_path_position.y, 20)
 	set_movement_target(Vector2(randX, randY))
