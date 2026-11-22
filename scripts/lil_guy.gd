@@ -6,6 +6,9 @@ var movement_target_position: Vector2 = Vector2(60.0,180.0)
 
 @onready var animation_player: AnimationPlayer = $Sprite2D/AnimationPlayer
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
+@onready var timer: Timer = $Timer
+
+var wanderTimer = randfn(0.8, 1.2)
 
 func _ready():
 	# These values need to be adjusted for the actor's speed
@@ -27,9 +30,13 @@ func actor_setup():
 
 func set_movement_target(movement_target: Vector2):
 	navigation_agent.target_position = movement_target
+	wanderTimer = randfn(0.2, 0.1)
 
 func _physics_process(delta):
 	if navigation_agent.is_navigation_finished():
+		if (timer.is_stopped()):
+			timer.start(wanderTimer)
+			wanderTimer = 0.1
 		return
 
 	var current_agent_position: Vector2 = global_position
@@ -37,3 +44,12 @@ func _physics_process(delta):
 
 	velocity = current_agent_position.direction_to(next_path_position) * movement_speed
 	move_and_slide()
+
+
+
+func _on_timer_timeout() -> void:
+	# do Brownian motion, kinda
+	var next_path_position: Vector2 = navigation_agent.target_position
+	var randX = randfn(next_path_position.x, 10)
+	var randY = randfn(next_path_position.y, 10)
+	set_movement_target(Vector2(randX, randY))
