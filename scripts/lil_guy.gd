@@ -7,6 +7,7 @@ var movement_target_position: Vector2 = Vector2(60.0,180.0)
 @onready var animation_player: AnimationPlayer = $Sprite2D/AnimationPlayer
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var timer: Timer = $Timer
+@onready var game: Node2D = $".."
 
 var wanderTimer = randfn(0.8, 1.2)
 
@@ -29,8 +30,13 @@ func actor_setup():
 	set_movement_target(movement_target_position)
 
 func set_movement_target(movement_target: Vector2): 
-	navigation_agent.target_position = Vector2(randfn(movement_target.x, 20), randfn(movement_target.y, 20))
-	wanderTimer = randfn(0.2, 0.1)
+	#navigation_agent.target_position = Vector2(randfn(movement_target.x, 20), randfn(movement_target.y, 20))
+	navigation_agent.target_position = movement_target
+	#wanderTimer = randfn(0.2, 0.1)
+
+func get_movement_target_from_game():
+	var new_pos = game.position_queue.pop_back()
+	set_movement_target(new_pos)
 
 func _physics_process(delta):
 	if navigation_agent.is_navigation_finished():
@@ -49,8 +55,9 @@ func _physics_process(delta):
 
 func _on_timer_timeout() -> void:
 	# do Brownian motion, kinda
+	pass
 	# TODO: for better movement_target setting, check if new target crosses a wall via a raycast?
-	var next_path_position: Vector2 = navigation_agent.target_position
-	var randX = randfn(next_path_position.x, 20)
-	var randY = randfn(next_path_position.y, 20)
-	set_movement_target(Vector2(randX, randY))
+	#var next_path_position: Vector2 = navigation_agent.target_position
+	#var randX = randfn(next_path_position.x, 20)
+	#var randY = randfn(next_path_position.y, 20)
+	#set_movement_target(Vector2(randX, randY))

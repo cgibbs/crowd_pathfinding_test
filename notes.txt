@@ -1,0 +1,1 @@
+per some guy on Reddit: instead of all of the units go to the same point (which will undoubtedly make them collide) I generate a circle made of points that are close to the central point. you can see it as some rings that envolve the central point. That way, they won't end up all trying to go to the same exact point.
